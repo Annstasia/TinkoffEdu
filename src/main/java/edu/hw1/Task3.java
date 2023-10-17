@@ -15,7 +15,7 @@ public class Task3 {
         // считается, что пустой массив вложен в любой, в том числе пустой
         return arr1Min.isEmpty()
             || (arr2Min.isPresent()
-                && arr1Min.getAsInt() > arr2Min.getAsInt()
-                && arr1Max.getAsInt() < arr2Max.getAsInt());
+            && arr1Min.getAsInt() > arr2Min.getAsInt()
+            && arr1Max.getAsInt() < arr2Max.getAsInt());
     }
 }

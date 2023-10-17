@@ -1,5 +1,6 @@
 package edu.hw1;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class Task8Test {
@@ -15,7 +16,7 @@ class Task8Test {
             {0, 0, 0, 0, 0, 0, 0, 0},
             {0, 1, 0, 0, 0, 0, 0, 1},
             {0, 0, 0, 0, 1, 0, 0, 0}};
-        assert Task8.knightBoardCapture(board);
+        Assertions.assertTrue(Task8.knightBoardCapture(board));
     }
 
     @Test
@@ -29,7 +30,7 @@ class Task8Test {
             {0, 0, 0, 0, 0, 1, 0, 1},
             {1, 0, 0, 0, 1, 0, 1, 0},
             {0, 0, 0, 1, 0, 1, 0, 1}};
-        assert !Task8.knightBoardCapture(board);
+        Assertions.assertFalse(Task8.knightBoardCapture(board));
 
         board = new int[][] {
             {0, 0, 0, 0, 1, 0, 0, 0},
@@ -41,7 +42,7 @@ class Task8Test {
             {0, 0, 0, 0, 0, 1, 0, 0},
             {1, 0, 0, 0, 0, 0, 0, 0}
         };
-        assert !Task8.knightBoardCapture(board);
+        Assertions.assertFalse(Task8.knightBoardCapture(board));
 
     }
 

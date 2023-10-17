@@ -1,30 +1,29 @@
 package edu.hw1;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class Task1Test {
+    private static final int ERROR = -1;
 
     @Test
     void minutesToSecondCorrect() {
-        assert Task1.minutesToSecond("13:28") == 808;
+        Assertions.assertEquals(Task1.minutesToSecond("13:28"), 808);
     }
 
     @Test
     void minutesToSecondTooBigSecond() {
-        System.out.println(Task1.minutesToSecond("13:68"));
-        assert Task1.minutesToSecond("13:68") == -1;
+        Assertions.assertEquals(Task1.minutesToSecond("13:68"), ERROR);
     }
 
     @Test
     void minutesToSecondMinus() {
-        assert Task1.minutesToSecond("-13:68") == -1;
+        Assertions.assertEquals(Task1.minutesToSecond("-13:68"), ERROR);
     }
 
     @Test
     void minutesToSecondDirtyString() {
-        assert Task1.minutesToSecond("ndeon 13:68 odjoiw") == -1;
+        Assertions.assertEquals(Task1.minutesToSecond("ndeon 13:68 odjoiw"), ERROR);
     }
 
 }
