@@ -17,4 +17,9 @@ public class Task8Test {
         Assertions.assertFalse(backwardIterator.hasNext());
         Assertions.assertNull(backwardIterator.next());
     }
+
+    @Test
+    void removeTest() {
+
+    }
 }

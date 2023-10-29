@@ -74,16 +74,8 @@ public class Contact implements Comparable<Contact> {
         return name;
     }
 
-    public void setName(@NotNull String name) {
-        this.name = name;
-    }
-
     public @Nullable String getSecondName() {
         return secondName;
-    }
-
-    public void setSecondName(@Nullable String secondName) {
-        this.secondName = secondName;
     }
 
     public @Nullable String getSurname() {

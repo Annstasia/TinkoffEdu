@@ -66,6 +66,11 @@ public class Task5Test {
 
     }
 
+    @Test void equalSurnameTest() {
+        Assertions.assertEquals(Task5.parseContacts(List.of("A B", "Z B"),
+            "DESC"), List.of(new Contact("Z B"), new Contact("A B")));
+    }
+
     @Test void emptyTest() {
         List<String> inputList = List.of();
         Assertions.assertEquals(Task5.parseContacts(inputList, "DESC"), List.of());

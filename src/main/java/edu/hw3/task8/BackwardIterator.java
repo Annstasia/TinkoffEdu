@@ -27,9 +27,4 @@ public class BackwardIterator<T> implements Iterator<T> {
         }
         return listIterator.previous();
     }
-
-    @Override
-    public void remove() {
-        listIterator.remove();
-    }
 }
