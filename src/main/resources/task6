@@ -1,0 +1,17 @@
+53 systemd-r UDP
+53 systemd-r TCP
+631 cups-brow UDP
+5432 docker-pr TCP
+5432 docker-pr TCP
+52829 jetbrains TCP
+44151 java TCP
+42944 java TCP
+5353 yandex_br UDP
+54421 docker-pr TCP
+5555 udpdump UDP
+57343 steam TCP
+44033 steam TCP
+42664 Civ5XP TCP
+6942 java TCP
+63343 java TCP
+63344 java TCP
