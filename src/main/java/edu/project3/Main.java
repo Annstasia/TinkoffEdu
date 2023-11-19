@@ -6,14 +6,28 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.PathMatcher;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 
 public class Main {
     final static DateTimeFormatter OUTPUT_DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     final static String COUNT = "Количество";
+    final static String PATH_STRING = "path";
+    final static String FROM_STRING = "from";
+    final static String TO_STRING = "to";
 
     private Main() {
     }
@@ -80,15 +94,47 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) throws URISyntaxException, IOException {
-        LogReport report = Analyzer
-            .analyse(new URI("https://raw.githubusercontent"
-                             + ".com/elastic/examples/master"
-                             + "/Common%20Data%20Formats"
-                             + "/nginx_logs/nginx_logs"));
-        toMD(report);
-        report = Analyzer.analyse(Path.of("src/main/resources/project3/logs.txt"));
-        toMD(report, Path.of("src/main/resources/project3/logreport1.md"));
+    public static void main(String[] args) throws ParseException, URISyntaxException, IOException {
 
+        Options options = new Options();
+        options.addRequiredOption("p", PATH_STRING, true, "путь к логам");
+        options.addOption("s", FROM_STRING, true, "начальная дата логов");
+        options.addOption("e", TO_STRING, true, "конечная дата логов");
+        options.addOption("f", "format", true, "формат вывода");
+        CommandLine cmd = new DefaultParser().parse(options, args);
+        String pathString = cmd.getOptionValue(PATH_STRING);
+        LogReport report;
+
+        LocalDateTime start = null;
+        LocalDateTime end = null;
+        if (cmd.hasOption(FROM_STRING)) {
+            start = LocalDateTime.of(
+                LocalDate.parse(cmd.getOptionValue(FROM_STRING), DateTimeFormatter.ISO_LOCAL_DATE),
+                LocalTime.MIN
+            );
+        }
+        if (cmd.hasOption(TO_STRING)) {
+            end = LocalDateTime.of(
+                LocalDate.parse(cmd.getOptionValue(TO_STRING), DateTimeFormatter.ISO_LOCAL_DATE),
+                LocalTime.MAX
+            );
+        }
+
+        if (pathString.startsWith("http")) {
+            report = Analyzer.analyse(new URI(pathString), start, end);
+        } else {
+            List<Path> paths = new ArrayList<>();
+            PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher("glob:" + pathString);
+
+            try (Stream<Path> childrenPaths = Files.walk(Path.of("."))) {
+                childrenPaths.forEach(path -> {
+                    if (pathMatcher.matches(path)) {
+                        paths.add(path);
+                    }
+                });
+            }
+            report = Analyzer.analyse(paths, start, end);
+        }
+        toMD(report, Path.of("src/main/resources/project3/logreport1.md"));
     }
 }

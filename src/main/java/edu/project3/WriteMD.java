@@ -34,7 +34,7 @@ public class WriteMD {
             for (int i = 0; i < maxLength; ++i) {
                 List<String> rowToAdd = new ArrayList<>(row.size());
                 for (var col : row) {
-                    rowToAdd.add(col.size() > i ? col.get(i) : "");
+                    rowToAdd.add(col.size() > i ? col.get(i) : ".");
                 }
                 out.println(rowView(rowToAdd));
             }

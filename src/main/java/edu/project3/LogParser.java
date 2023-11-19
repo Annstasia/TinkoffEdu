@@ -6,26 +6,23 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LogParser {
-    private LogParser() {
-    }
-
     // не нашла простого способа экранизации кавычек.
     // 1-нные названия переменных - плохо, но, кажется, в регулярках только утяжелится чтения при использовании
     // длинного имени
     final static String Q = Pattern.quote("\"");
     final static String NOT_QUOTE_PATTERN = "[^" + Q + "]*";
+    final static String REQUEST_REGEX =
+        Q + "(\\w*) ([^" + Q + " ]*) (" + NOT_QUOTE_PATTERN + ")" + Q;
+    final static String HTTP_REFERER_REGEX = Q + "(" + NOT_QUOTE_PATTERN + ")" + Q;
+    final static String USER_AGENT_REGEX = Q + "(" + NOT_QUOTE_PATTERN + ")" + Q;
     final static String ADDRESS_REGEX = "([^ ]*)";
     final static String PORT_REGEX = "(\\d{1,5})";
     final static String REMOTE_USER_REGEX = "(.*?)";
     final static String DATE_TIME_REGEX =
         "\\[(\\d{1,2}\\/\\w*\\/\\d{4}(?::\\d{2}){3} \\+\\d{4})\\]";
-    final static String REQUEST_REGEX =
-        Q + "(\\w*) ([^" + Q + " ]*) (" + NOT_QUOTE_PATTERN + ")" + Q;
     final static String NUMBER_GROUP_REGEX = "(\\d*)";
     final static String STATUS_REGEX = NUMBER_GROUP_REGEX;
     final static String BODY_BYTES_REGEX = NUMBER_GROUP_REGEX;
-    final static String HTTP_REFERER_REGEX = Q + "(" + NOT_QUOTE_PATTERN + ")" + Q;
-    final static String USER_AGENT_REGEX = Q + "(" + NOT_QUOTE_PATTERN + ")" + Q;
     final static Pattern LOG_PATTERN = Pattern.compile(ADDRESS_REGEX + " - "
                                                        + REMOTE_USER_REGEX + "- "
                                                        + DATE_TIME_REGEX + " "
@@ -46,12 +43,14 @@ public class LogParser {
     final static int USER_AGENT_GROUP = 10;
     static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MMM/uuuu:HH:mm:ss Z");
 
+    private LogParser() {
+    }
+
     public static LogRecord toLogRecord(String stringLog) {
         Matcher matcher = LOG_PATTERN.matcher(stringLog);
         if (!matcher.find()) {
-
-            return null;
             // TODO: LOG.ERR / EXCEPTION
+            return null;
         } else {
             return new LogRecord(
                 matcher.group(ADDRESS_GROUP),
