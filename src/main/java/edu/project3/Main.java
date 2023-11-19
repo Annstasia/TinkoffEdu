@@ -94,6 +94,9 @@ public class Main {
         }
     }
 
+    // пример запуска --path **resources/**/logs* - обработает
+    // src/main/resources/project3/logs.txt
+    // src/main/resources/project3/logs2.txt
     public static void main(String[] args) throws ParseException, URISyntaxException, IOException {
 
         Options options = new Options();
