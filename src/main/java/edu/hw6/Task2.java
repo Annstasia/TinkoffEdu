@@ -1,13 +1,9 @@
 package edu.hw6;
 
 import java.io.IOException;
-import java.io.PipedReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
-import java.util.PriorityQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -15,24 +11,22 @@ import java.util.stream.Stream;
 public class Task2 {
     private final static String COPY_NAME = " - копия";
     private final static String COPY_REGEX = "(?:(" + COPY_NAME + ")(?: \\((\\d)\\))?)?";
+    private final static Pattern MAIN_FILE_PATTERN = Pattern.compile("(.*?)" + COPY_REGEX + "(\\..*)?$");
     private final static int MAIN_NAME_GROUP = 1;
     private final static int MAIN_COPY_GROUP = 2;
     private final static int COPY_COUNT_GROUP = 3;
     private final static int SUFFIX_GROUP = 4;
+    private final static int BUFFER_SIZE = 4048;
     private final static int START_NUMBER = 2;
-//    private final static Pattern COPY_PATTERN = Pattern.compile(
-//        "(.*?)(" + COPY_NAME + ")?( \\(\\d\\))?(\\..*)?$");
-
-
     private final static int FILE_NAME_GROUP = 1;
     private final static int FILE_SUFFIX_GROUP = 4;
     private final static int FILE_COPY_NAME_GROUP = 2;
     private final static int FILE_COPY_NUMBER_GROUP = 3;
     private final static int COPY_NAME_GROUP = 1;
     private final static int COPY_NUMBER_GROUP = 2;
-    private final static Pattern MAIN_FILE_PATTERN = Pattern.compile(
-        "(.*?)" + COPY_REGEX + "(\\..*)?$");
 
+    private Task2() {
+    }
 
     // Не знаю, как в Windows, вот правила копирования для linux mint (пояснения ниже)
     // (название копируемого файла, его копии в директории -> название полученной копии):
@@ -52,33 +46,26 @@ public class Task2 {
             throw new RuntimeException("да как так-то. Регулярка " + MAIN_FILE_PATTERN.pattern() + "неправильная( ");
         }
         String fileName = mainFileMather.group(FILE_NAME_GROUP);
-        StringBuilder builder = new StringBuilder(fileName)
-            .append(COPY_NAME);
+        StringBuilder builder = new StringBuilder(fileName).append(COPY_NAME);
         String fileSuffix = mainFileMather.group(FILE_SUFFIX_GROUP);
         if (fileSuffix == null) {
             fileSuffix = "";
         }
 
-
-        final Pattern copyPattern = Pattern.compile(Pattern.quote(fileName)
-                                                    + COPY_REGEX +
-                                                    Pattern.quote(fileSuffix));
-        boolean[] copiesNumbers = new boolean[4048];
+        final Pattern copyPattern = Pattern.compile(Pattern.quote(fileName) + COPY_REGEX + Pattern.quote(fileSuffix));
+        boolean[] copiesNumbers = new boolean[BUFFER_SIZE];
         Arrays.fill(copiesNumbers, false);
         try (Stream<Path> paths = Files.walk(path.getParent())) {
             paths.map(copyPath -> copyPattern.matcher(copyPath.toString()))
                  .filter((matcher -> matcher.find() && matcher.group(COPY_NAME_GROUP) != null))
-                 .map(matcher1 ->matcher1.group(COPY_NUMBER_GROUP))
-                .forEach(groupNumber -> copiesNumbers[groupNumber == null?
-                    0 : Integer.parseInt(groupNumber)] = true);
+                 .map(matcher1 -> matcher1.group(COPY_NUMBER_GROUP))
+                 .forEach(groupNumber -> copiesNumbers[groupNumber == null ? 0 : Integer.parseInt(groupNumber)] = true);
         }
 
         if (copiesNumbers[0] || mainFileMather.group(FILE_COPY_NAME_GROUP) != null) {
             for (int i = 2; i < copiesNumbers.length; ++i) {
                 if (!copiesNumbers[i]) {
-                    builder.append(" (")
-                           .append(i)
-                           .append(")");
+                    builder.append(" (").append(i).append(")");
                     break;
                 }
             }

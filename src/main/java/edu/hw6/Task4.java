@@ -12,8 +12,11 @@ import java.util.zip.CRC32C;
 import java.util.zip.CheckedOutputStream;
 
 public class Task4 {
-    public static void main(String[] args) throws IOException {
-        try (OutputStream outputStream = Files.newOutputStream(Path.of("src/main/resources/diskmap_storage.txt"));) {
+    private Task4() {
+    }
+
+    public static void task4() throws IOException {
+        try (OutputStream outputStream = Files.newOutputStream(Path.of("src/main/resources/diskmap_storage.txt"))) {
             CheckedOutputStream checkedOutputStream = new CheckedOutputStream(outputStream, new CRC32C());
             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(checkedOutputStream);
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(

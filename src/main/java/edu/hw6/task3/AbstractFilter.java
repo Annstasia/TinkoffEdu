@@ -1,18 +1,14 @@
 package edu.hw6.task3;
 
-import java.io.IOException;
 import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Objects;
-import java.util.function.Predicate;
 
-
-public interface AbstractFilter extends DirectoryStream.Filter<Path>{
+public interface AbstractFilter extends DirectoryStream.Filter<Path> {
     default AbstractFilter and(AbstractFilter other) {
-        return (path)->this.accept(path)&&other.accept(path);
-    };
-//    default Predicate<Path> and(Predicate<? super Path> other) {
+        return (path) -> this.accept(path) && other.accept(path);
+    }
+
+    //    default Predicate<Path> and(Predicate<? super Path> other) {
 //        return this;
 ////        Objects.requireNonNull(other);
 ////        return (t) -> {
@@ -24,8 +20,6 @@ public interface AbstractFilter extends DirectoryStream.Filter<Path>{
 ////        };
 //    }
 }
-
-
 
 //public class AbstractFilter implements DirectoryStream.Filter<Path> {
 //    DirectoryStream.Filter<Path> filter;

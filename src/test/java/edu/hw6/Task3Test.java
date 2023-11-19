@@ -22,7 +22,7 @@ public class Task3Test {
     }
     @Test
     void testReadable() throws IOException {
-        DirectoryStream.Filter<Path> filter = Task3.readable;
+        DirectoryStream.Filter<Path> filter = Task3.READABLE;
         Set<String> answer = new HashSet<>();
         try (DirectoryStream<Path> entries = Files.newDirectoryStream(DIR_PATH, filter)) {
             entries.forEach((path -> answer.add(path.getFileName().toString())));
@@ -34,8 +34,8 @@ public class Task3Test {
     }
     @Test
     void testAll() {
-        DirectoryStream.Filter<Path> filter = Task3.regularFile
-            .and(Task3.readable)
+        DirectoryStream.Filter<Path> filter = Task3.REGULAR_FILE
+            .and(Task3.READABLE)
             .and(Task3.largerThan(100_000))
             .and(Task3.magicNumber(0x89, 'P', 'N', 'G'))
             .and(Task3.globMatches("*.png"))

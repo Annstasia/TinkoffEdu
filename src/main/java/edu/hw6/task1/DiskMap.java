@@ -1,27 +1,24 @@
 package edu.hw6.task1;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 public class DiskMap extends HashMap<String, String> {
+    private static final int BUFFER_SIZE = 1024;
     Path filePath;
+
     public DiskMap() {
         this(Path.of("src/main/resources/diskmap_storage.txt"));
     }
+
     public DiskMap(Path filePath) {
         this.filePath = filePath;
         try (FileChannel inChannel = FileChannel.open(filePath)) {
-            ByteBuffer buffer = ByteBuffer.allocate(1024);
+            ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
             StringBuilder builder = new StringBuilder();
             String currentKey = "";
             while (inChannel.read(buffer) > 0) {
@@ -47,10 +44,13 @@ public class DiskMap extends HashMap<String, String> {
     public void save() {
         save(this.filePath);
     }
+
     public void save(Path filePath) {
-        try (FileChannel outChannel = FileChannel.open(filePath,
-                                                       StandardOpenOption.WRITE)) {
-            ByteBuffer buffer = ByteBuffer.allocate(1024);
+        try (FileChannel outChannel = FileChannel.open(
+            filePath,
+            StandardOpenOption.WRITE
+        )) {
+            ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
             for (Entry<String, String> kv : this.entrySet()) {
                 for (char c : kv.getKey().toCharArray()) {
                     buffer.put((byte) c);
@@ -64,8 +64,7 @@ public class DiskMap extends HashMap<String, String> {
             buffer.flip();
             outChannel.truncate(0);
             outChannel.write(buffer, 0);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
