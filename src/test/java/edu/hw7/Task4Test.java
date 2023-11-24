@@ -4,7 +4,7 @@ import edu.hw7.task4.PiCounter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class Task4 {
+public class Task4Test {
     private final static int N = 1000000;
 
     @Test

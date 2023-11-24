@@ -7,6 +7,7 @@ public class Task2 {
     private Task2() {
     }
 
+    // по заданию не нужно. Просто для сравнения скорости с многопоточным
     public static BigInteger notParallelFactorial(int n) {
         return LongStream.range(1, n + 1)
             .mapToObj(BigInteger::valueOf)
