@@ -19,9 +19,14 @@ import edu.hw4.Task6;
 import edu.hw4.Task7;
 import edu.hw4.Task8;
 import edu.hw4.Task9;
+import edu.hw4.task19_20.Task19;
+import edu.hw4.task19_20.Task20;
+import edu.hw4.task19_20.errors.ValidationError;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -63,6 +68,21 @@ public class TestHw4 {
             animals.get(6)
         ).toArray());
     }
+
+    List<Animal> invalidAnimals = List.of(
+        new Animal(null, null, null, 0, 0, 0, false),
+        new Animal("", null, null, -1, -3, -100, false),
+        new Animal("dobby13", null, null, -1, -3, -100, false)
+    );
+
+    List<String> invalidAnimalsPrettyStringAnswer = List.of(
+        "Name error. Cause: java.lang.NullPointerException: null name",
+        "Age error. Cause: edu.hw4.task19_20.errors.NegativeException: -1 < 0\n" +
+            "Name error: empty stirng\n" +
+            "Weight error. Cause: edu.hw4.task19_20.errors.NegativeException: -100 < 0",
+        "Age error. Cause: edu.hw4.task19_20.errors.NegativeException: -1 < 0\n" +
+            "Weight error. Cause: edu.hw4.task19_20.errors.NegativeException: -100 < 0"
+    );
 
     @Test
     void task2Test() {
@@ -192,8 +212,8 @@ public class TestHw4 {
 
     @Test
     void task16Test() {
-        System.out.println(Task16.sortTypeSexName(animals));
-        Assertions.assertArrayEquals(Task16.sortTypeSexName(animals).toArray(),
+        Assertions.assertArrayEquals(
+            Task16.sortTypeSexName(animals).toArray(),
             List.of(
                 animals.get(0),
                 animals.get(1),
@@ -204,7 +224,8 @@ public class TestHw4 {
                 animals.get(7),
                 animals.get(8),
                 animals.get(6)
-                ).toArray());
+            ).toArray()
+        );
     }
 
     @Test
@@ -217,6 +238,28 @@ public class TestHw4 {
     void task18Test() {
         List<List<Animal>> input = List.of(animals, animals2);
         Assertions.assertEquals(Task18.heaviestFish(input), animals.get(4));
+    }
+
+    @Test
+    void task19Test() {
+        Map<String, Set<ValidationError>> errorMap = Task19.validate(invalidAnimals);
+        Assertions.assertEquals(
+            invalidAnimals.stream().map(Animal::name).collect(Collectors.toSet()),
+            errorMap.keySet()
+        );
+        Assertions.assertTrue(Task19.validate(animals).isEmpty());
+
+    }
+
+    @Test
+    void task20Test() {
+        Map<String, String> validate = Task20.validate(invalidAnimals);
+        for (int i = 0; i < invalidAnimals.size(); ++i) {
+            Assertions.assertEquals(
+                invalidAnimalsPrettyStringAnswer.get(i),
+                validate.get(invalidAnimals.get(i).name())
+            );
+        }
     }
 
 }

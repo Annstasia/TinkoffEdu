@@ -10,6 +10,9 @@ public class Task11 {
     }
 
     public static List<Animal> bigBites(Collection<Animal> animals) {
-        return animals.stream().filter(animal -> animal.bites() && (animal.height() > MIN_HEIGHT)).toList();
+        return animals.stream()
+            .filter(Animal::bites)
+            .filter(animal -> animal.height() > MIN_HEIGHT)
+            .toList();
     }
 }

@@ -9,6 +9,8 @@ public class Task1 {
     }
 
     public static List<Animal> sortHeightASC(Collection<Animal> animals) {
-        return animals.stream().sorted(Comparator.comparingInt(Animal::height)).toList();
+        return animals.stream()
+            .sorted(Comparator.comparingInt(Animal::height))
+            .toList();
     }
 }

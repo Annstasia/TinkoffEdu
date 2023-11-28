@@ -1,6 +1,7 @@
 package edu.hw4;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 public class Task2 {
@@ -8,7 +9,9 @@ public class Task2 {
     }
 
     public static List<Animal> sortWeightFirstK(Collection<Animal> animals, int k) {
-        return animals.stream().sorted((animal1, animal2) -> Integer.compare(animal2.weight(), animal1.weight()))
-            .limit(k).toList();
+        return animals.stream()
+            .sorted(Comparator.comparingInt(Animal::weight).reversed())
+            .limit(k)
+            .toList();
     }
 }

@@ -9,7 +9,8 @@ public class Task3 {
     }
 
     public static Map<Animal.Type, Integer> groupCountersByType(Collection<Animal> animals) {
-        return animals.stream().collect(Collectors.groupingBy(Animal::type, Collectors.summingInt(animal -> 1)));
+        return animals.stream()
+            .collect(Collectors.groupingBy(Animal::type, Collectors.summingInt(animal -> 1)));
 
     }
 }
