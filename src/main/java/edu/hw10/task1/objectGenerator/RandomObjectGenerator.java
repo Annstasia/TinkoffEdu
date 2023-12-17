@@ -55,25 +55,4 @@ public class RandomObjectGenerator {
         }
         return (T) constructor.newInstance(paramsValue);
     }
-
-//    // По-хорошему, все аннотации аргументов должны быть обработаны еще в генераторе
-//    // Но при расширении
-//    // вряд ли в конструкторе и фабричном методе будет очень много аннотаций
-//    // кажется, if else тут удобнее, чем chain of responsibility
-//    private static boolean validateAnnotations(Object generatedObject, Parameter param) {
-//        Min minAnnotation = param.getAnnotation(Min.class);
-//        if (minAnnotation != null && minAnnotation.value() > ((Number) generatedObject).longValue()) {
-//            return false;
-//        }
-//        Max maxAnnotation = param.getAnnotation(Max.class);
-//        if (maxAnnotation != null && maxAnnotation.value() <= ((Number) generatedObject).longValue()) {
-//            return false;
-//        }
-//        NotNull notNullAnnotation = param.getAnnotation(NotNull.class);
-//        if (notNullAnnotation != null && (generatedObject == null)){
-//            return false;
-//        }
-//        return true;
-//    }
-
 }

@@ -8,8 +8,8 @@ public class RandomIntegerGenerator extends RandomParamGenerator {
     private static final int DEFAULT_NOTNULL_PER_NULL = 10;
     boolean notNull = true;
     RandomIntGenerator intGenerator = new RandomIntGenerator();
-//    private Supplier<Boolean> nullStrategy = () ->
-//            ThreadLocalRandom.current().nextInt(DEFAULT_NOTNULL_PER_NULL) == 0;
+    // private Supplier<Boolean> nullStrategy = () ->
+    //      ThreadLocalRandom.current().nextInt(DEFAULT_NOTNULL_PER_NULL) == 0;
 
     // Сверху стратегия адекватнее, но на такой лучше видно, что null генерируется
     private Supplier<Boolean> nullStrategy = () -> true;
